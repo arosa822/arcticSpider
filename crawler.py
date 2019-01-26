@@ -8,19 +8,38 @@ import pickle
 import sys
 import time
 
+######################## Crawler Settings ########################
+
 
 def setConfig():
+    '''
+    Desc     : Pulls crawler settings from the .config file located
+                in the ./vault directory
+
+    Required : ./vault/.config
+    
+    Format   : 'foo: bar' where foo is the description and 
+               bar is the value
+    
+    Output   : list of lines from file
+    
+    '''
 
     CONFIGS = []
-    with open('./vault/config','r') as f:
+    
+    with open('./vault/.config','r') as f:
         data = f.readlines()
         for line in data:
             CONFIGS.append(line.strip().split())
 
     return CONFIGS
 
-ua = UserAgent() # generate a random user agent
+UA = UserAgent() # generate a random user agent
 URL = setConfig()[0][1] # first line second element
+
+
+######################## Crawler Settings ########################
+
 
 def crawl():
 
@@ -42,7 +61,7 @@ def crawl():
             print('crawling on {} \n'.format(resort))
 
             req = Request(URL + resort) 
-            req.add_header('User-Agent', ua.random)    
+            req.add_header('User-Agent', UA.random)    
 
             req_doc = urlopen(req).read().decode('utf8')
             soup = BeautifulSoup(req_doc,'html.parser')
@@ -90,14 +109,6 @@ def turnToList(soup):
     
 
 def main():
-    #generate a random number based on the list created for indexing
-    #proxies = getProxies()
-    #[proxy, index] = random_proxy(proxies)
-    #cleanProxyList = selfCheck(proxies)
-
-    #print(proxy)
-    # integrate proxies generated for ski report
-    
     crawl()
 
 if __name__=='__main__':

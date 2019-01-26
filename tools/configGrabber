@@ -1,0 +1,51 @@
+#! /usr/bin/env python3
+
+import sys
+
+CONFIG = '../vault/.config'
+
+def setArg():
+    if len(sys.argv) < 2:
+        print('''
+              Please include referencing index 
+        
+              './configGrabber 0 1'
+              
+              # selects the 2nd element on the 1st line
+
+
+              './configGrabber 1' 
+              
+              # selects the 2nd line
+
+              ''')
+        sys.exit()
+
+    return sys.argv
+
+ARGS = setArg()
+
+def showConfig():
+    
+    CONFIGS = []
+    
+    with open('../vault/.config','r') as f:
+        data = f.readlines()
+        for line in data:
+            CONFIGS.append(line.strip().split())
+    
+    
+    if len(ARGS) == 2:
+        return CONFIGS[int(ARGS[1])]
+    if len(ARGS) ==3:
+        return CONFIGS[int(ARGS[1])][int(ARGS[2])]
+
+    return CONFIGS
+            
+
+def main():
+    print(showConfig())
+    return 
+
+if __name__ == '__main__':
+    main()

@@ -25,17 +25,6 @@ def clean():
 
     return
 
-
-def setConfig():
-    CONFIG = []
-    with open('./vault/config','r') as d:
-        data = d.readlines()
-        for line in data:
-            line.strip()
-            CONFIG.append(line.strip().split())
-    print(CONFIG[0][1])
-    return
-
 def main():
     return setConfig()
 
