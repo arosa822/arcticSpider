@@ -1,5 +1,5 @@
 #! /usr/bin/env python3
-from urllib.request import Request, urlopen
+import requests
 from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
 from random import shuffle
@@ -36,7 +36,7 @@ def setConfig():
 
 UA = UserAgent() # generate a random user agent
 URL = setConfig()[0][1] # first line second element
-
+API_KEY = setConfig()[1][1]
 
 ######################## Crawler Settings ########################
 
@@ -59,12 +59,16 @@ def crawl():
     for resort in resortList:
         try:
             print('crawling on {} \n'.format(resort))
-
-            req = Request(URL + resort) 
-            req.add_header('User-Agent', UA.random)    
-
-            req_doc = urlopen(req).read().decode('utf8')
-            soup = BeautifulSoup(req_doc,'html.parser')
+            
+            payload = {'key': API_KEY, 'url': URL + resort}
+            req_doc = requests.get('http://api.scraperapi.com',params = payload)
+            
+            print( req_doc.status_code)
+            #req = Request(URL + resort) 
+            #req.add_header('User-Agent', UA.random)    
+            #req_doc = urlopen(req).read().decode('utf8')
+           
+            soup = BeautifulSoup(req_doc.text,'html.parser')
             
             data_tbl = soup.select('.dnum')
             snow_tbl = soup.select('.us')
@@ -84,7 +88,7 @@ def crawl():
 
             print(data[resort])
                  
-            print('completed crawling on {}...\n'.format(resort))
+            print('\ncompleted crawling on {}...\n'.format(resort))
         except:
             print('error retrieving data for {}\n'.format(resort))
             errorlog.append(resort)
@@ -98,7 +102,7 @@ def crawl():
     pickle.dump(data,pickle_out)
     pickle_out.close()
     print('crawler completed!')
-    
+   
     return
 
 def turnToList(soup):
