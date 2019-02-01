@@ -2,14 +2,23 @@
 import requests
 from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
-from random import shuffle
+from random import shuffle, randint
 import random
 import pickle
 import sys
 import time
+import logging
 
 ######################## Crawler Settings ########################
 
+logging.basicConfig(filename = 'crawler.log',
+                    filemode='a',
+                    format = '%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s',
+                    datefmt = '%Y-%m-%d %H:%M:%S', 
+                    level = logging.DEBUG)
+
+logging.info('Crawler initialized..')
+#sef.logger = logging.getLogger('this is a test')
 
 def setConfig():
     '''
@@ -27,6 +36,7 @@ def setConfig():
 
     CONFIGS = []
     
+    
     with open('./vault/.config','r') as f:
         data = f.readlines()
         for line in data:
@@ -38,11 +48,12 @@ UA = UserAgent() # generate a random user agent
 URL = setConfig()[0][1] # first line second element
 API_KEY = setConfig()[1][1]
 
+
 ######################## Crawler Settings ########################
 
 
 def crawl():
-
+    
     # grab the list of resorts
     pickle_in = open('./vault/resortList.pickle', 'rb')
     pickledFile = pickle.load(pickle_in)
@@ -54,16 +65,20 @@ def crawl():
 
     for resorts in pickledFile:
         resortList.append(''.join(resorts))
+
     shuffle(resortList)
 
     for resort in resortList:
+
+        logging.info('Crawling on {}'.format(resort))
         try:
             print('crawling on {} \n'.format(resort))
+                   
             
             payload = {'key': API_KEY, 'url': URL + resort}
             req_doc = requests.get('http://api.scraperapi.com',params = payload)
             
-            print( req_doc.status_code)
+            logging.info(req_doc.status_code)
             #req = Request(URL + resort) 
             #req.add_header('User-Agent', UA.random)    
             #req_doc = urlopen(req).read().decode('utf8')
@@ -92,9 +107,11 @@ def crawl():
         except:
             print('error retrieving data for {}\n'.format(resort))
             errorlog.append(resort)
+            logging.error('failed to retrieve data from {}'.format(resort))
+            logging.error('response code: {}'.format(req_doc.status_code))
             pass
 
-        time.sleep(30)
+        time.sleep(randint(15,40))
 
     data['error'] = errorlog
     #offload data into a pickle
