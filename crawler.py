@@ -9,6 +9,9 @@ import sys
 import time
 import logging
 
+# keep track of time it takes to execute crawl
+start_time = time.time()
+
 ######################## Crawler Settings ########################
 
 logging.basicConfig(filename = 'crawler.log',
@@ -18,7 +21,6 @@ logging.basicConfig(filename = 'crawler.log',
                     level = logging.DEBUG)
 
 logging.info('Crawler initialized..')
-#sef.logger = logging.getLogger('this is a test')
 
 def setConfig():
     '''
@@ -33,9 +35,7 @@ def setConfig():
     Output   : list of lines from file
     
     '''
-
     CONFIGS = []
-    
     
     with open('./vault/.config','r') as f:
         data = f.readlines()
@@ -48,9 +48,7 @@ UA = UserAgent() # generate a random user agent
 URL = setConfig()[0][1] # first line second element
 API_KEY = setConfig()[1][1]
 
-
 ######################## Crawler Settings ########################
-
 
 def crawl():
     
@@ -72,7 +70,7 @@ def crawl():
 
         logging.info('Crawling on {}'.format(resort))
         
-        print('crawling on {} \n'.format(resort))
+        print('crawling on {}... \n'.format(resort))
                
         payload = {'key': API_KEY, 'url': URL + resort}
         req_doc = requests.get('http://api.scraperapi.com',params = payload)
@@ -107,9 +105,8 @@ def crawl():
             # store into dictionary
             data[resort] = {'date':date_tbl,'snow':snow_tbl,'h_temp':high_tbl,'l_temp':low_tbl}
 
-            print(data[resort])
-                 
-            print('\ncompleted crawling on {}...\n'.format(resort))
+            print(data[resort])                 
+            print('\ncompleted crawling on {}.\n'.format(resort))
 
         time.sleep(randint(15,40))
     
@@ -118,9 +115,12 @@ def crawl():
     pickle_out = open('../vault/data.pickle','wb')
     pickle.dump(data,pickle_out)
     pickle_out.close()
-    print('crawler completed!')
-   
+
+    print('crawler completed!')        
+    logging.info('Crawl completed') 
+    logging.info('Crawler took {}s to complete ------------ '.format( (time.time() - start_time)))
     return
+
 
 def turnToList(soup):
     table = []
