@@ -71,18 +71,27 @@ def crawl():
     for resort in resortList:
 
         logging.info('Crawling on {}'.format(resort))
-        try:
-            print('crawling on {} \n'.format(resort))
-                   
-            
-            payload = {'key': API_KEY, 'url': URL + resort}
-            req_doc = requests.get('http://api.scraperapi.com',params = payload)
-            
-            logging.info(req_doc.status_code)
-            #req = Request(URL + resort) 
-            #req.add_header('User-Agent', UA.random)    
-            #req_doc = urlopen(req).read().decode('utf8')
+        
+        print('crawling on {} \n'.format(resort))
+               
+        payload = {'key': API_KEY, 'url': URL + resort}
+        req_doc = requests.get('http://api.scraperapi.com',params = payload)
+        logging.info(req_doc.status_code)
+
+        # typical method for requests when not spoofing proxies
+        #req = Request(URL + resort) 
+        #req.add_header('User-Agent', UA.random)    
+        #req_doc = urlopen(req).read().decode('utf8')
            
+        if req_doc.status_code != 200:
+                    
+            print('error retrieving data for {}\n'.format(resort))
+            errorlog.append(resort)
+            logging.error('failed to retrieve data from {}'.format(resort))
+            logging.error('response code: {}'.format(req_doc.status_code))
+
+        else:
+                            
             soup = BeautifulSoup(req_doc.text,'html.parser')
             
             data_tbl = soup.select('.dnum')
@@ -90,10 +99,7 @@ def crawl():
             high_tbl = soup.select('.high') 
             low_tbl = soup.select('.low')
             
-            #for i in data_tbl:
-            #    print(i.getText().split())
-
-            date_tbl = turnToList(data_tbl)[:5]
+            date_tbl = turnToList(data_tbl)[:5] # need only the first 5 entries 
             snow_tbl = turnToList(snow_tbl)
             high_tbl  = turnToList(high_tbl)
             low_tbl = turnToList(low_tbl)
@@ -104,17 +110,11 @@ def crawl():
             print(data[resort])
                  
             print('\ncompleted crawling on {}...\n'.format(resort))
-        except:
-            print('error retrieving data for {}\n'.format(resort))
-            errorlog.append(resort)
-            logging.error('failed to retrieve data from {}'.format(resort))
-            logging.error('response code: {}'.format(req_doc.status_code))
-            pass
 
         time.sleep(randint(15,40))
-
+    
+    # stash data and errors 
     data['error'] = errorlog
-    #offload data into a pickle
     pickle_out = open('../vault/data.pickle','wb')
     pickle.dump(data,pickle_out)
     pickle_out.close()
