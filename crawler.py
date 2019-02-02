@@ -112,7 +112,7 @@ def crawl():
     
     # stash data and errors 
     data['error'] = errorlog
-    pickle_out = open('../vault/data.pickle','wb')
+    pickle_out = open('./vault/data.pickle','wb')
     pickle.dump(data,pickle_out)
     pickle_out.close()
 
