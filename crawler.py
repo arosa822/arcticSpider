@@ -14,6 +14,7 @@ import datetime
 # keep track of time it takes to execute crawl
 start_time = time.time()
 
+now = datetime.datetime.now()
 ######################## Crawler Settings ########################
 
 logging.basicConfig(filename = 'crawler.log',
