@@ -8,6 +8,8 @@ import pickle
 import sys
 import time
 import logging
+import datetime
+
 
 # keep track of time it takes to execute crawl
 start_time = time.time()
@@ -112,7 +114,7 @@ def crawl():
     
     # stash data and errors 
     data['error'] = errorlog
-    pickle_out = open('./vault/data.pickle','wb')
+    pickle_out = open('./vault/'+now.strftime('%Y%m%d')+'data.pickle','wb')
     pickle.dump(data,pickle_out)
     pickle_out.close()
 
