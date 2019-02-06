@@ -1,0 +1,18 @@
+<html>
+		</head>
+		{% if title %}
+		<title> {{ title }} - web crawler </title>
+		{% else  %}
+		<title>Welcome</title>
+		{% endif %}
+		</head>
+    <body> 
+				<h1> Mountain Spotlight: {{ mountain['mountain'] }} </h1>
+				{%for i in data %}
+				<div><p> {{i.day}} :</b>
+			 	snowfall <b> {{i.snow.day }} </b>
+				temperature <b>{{i.temp.day }}  </b></div></p>
+				{% endfor %}
+    </body>
+</html>
+

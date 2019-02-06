@@ -4,7 +4,7 @@ import pickle
 import sys
 
 def dePickle():
-    pickle_in = open('./vault/data.pickle','rb')
+    pickle_in = open('./vault/20190205data.pickle','rb')
     pickledFile = pickle.load(pickle_in)
     #pickle_in.close()
     return pickledFile
@@ -20,6 +20,8 @@ def clean():
     
     # get the list of resorts
     for field in data:
+        print('-------------------------------------')
+        print(field)
         
         date = data[field]['date']
         snow = data[field]['snow']
@@ -27,22 +29,23 @@ def clean():
 
         hTemp = data[field]['h_temp']
         
+        print(date)
+        print(len(snow))
         
         # first element is night for the current day
 
         snowDay = snow[1::2]
         snowNight = snow[0::2]
         
-        print('-------------------------------------')
-        print(field)
-        
-        print(date)
         print('Low Temp:\n{}'.format(lTemp))
+
         print('High Temp:\n{}'.format(hTemp))
 
-        print('Day-snow:\n{}'.format(snowDay))
+        print(hTemp)
+
+        print('Day:\n{}'.format(snowDay))
         
-        print('Night-snow:\n{}'.format(snowNight))
+        print('Night:\n{}'.format(snowNight))
         
         
         #print(snowDay)

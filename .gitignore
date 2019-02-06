@@ -2,3 +2,4 @@
 *.swp
 /venv
 crawler.log
+__pycache__
