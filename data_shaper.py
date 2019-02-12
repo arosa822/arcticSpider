@@ -5,7 +5,7 @@ import sys
 import itertools
         
 def dePickle():
-    pickle_in = open('./vault/20190211data.pickle','rb')
+    pickle_in = open('./vault/20190212data.pickle','rb')
     pickledFile = pickle.load(pickle_in)
     #pickle_in.close()
     return pickledFile
@@ -38,8 +38,8 @@ def clean():
         
         # first element is night for the current day
 
-        snowDay = snow[1::2]
-        snowNight = snow[0::2]
+        snowDay = snow[0::2]
+        snowNight = snow[1::2]
         
         # combine all the elements in the list 
         # [[1,2],[3,4]] => [1,2,3,4]

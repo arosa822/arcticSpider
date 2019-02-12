@@ -3,26 +3,29 @@ from flask import render_template
 import datetime
 
 
-now = datetime.datetime.now()
-
+NOW = datetime.datetime.now()
+CRAWLDATE = datetime.date(2019,2,12)
 
 @app.route('/')
 @app.route('/index')
 def index():
-    mountain = {'mountain':'keystone'}
+    lastCrawl = {'CrawlTime':CRAWLDATE}
     data = [
-    {
-            'day' : now.strftime('%Y/%m/%d'),
+    {       
 
+            'mountain':'keystone',
+            'day' : NOW.strftime('%Y/%m/%d'),
             'snow': {'day':'3-4'},
             'temp': {'day':'20 deg C'}
     },
     {
-            
+             
+            'mountain':'ArapahoeBasin',
             'day' : 'fake date',
-
             'snow': {'day':'3-4'},
             'temp': {'day':'5'}
     }
     ]
-    return  render_template('index.html', title = 'Arctic Spider', mountain = mountain, data=data)
+
+    return  render_template('index.html', title = 'Arctic Spider', \
+                 lastCrawl = lastCrawl, data=data)

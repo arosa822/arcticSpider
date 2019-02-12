@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-		<h1> Mountain Spotlight(test): {{ mountain['mountain'] }} </h1>
+<h1> Template tester:  </h1>
+<h2> Last Crawl: {{ lastCrawl['CrawlTime']}} </h2>
 		{%for i in data %}
 		<div><p> {{i.day}} :</b>
+        Mountain <b>{{i.mountain}}</b>
 		snowfall <b> {{i.snow.day }} </b>
 		temperature <b>{{i.temp.day }}  </b></div></p>
 		{% endfor %}
