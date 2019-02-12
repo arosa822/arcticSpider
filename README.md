@@ -12,9 +12,8 @@ between each request to simulate users and minimize impact on the target website
 
 
 ## Features 
-API - for tying IOT devices  
-WebApp - practice building / storing data  
-Snow Analyzer - fun / curiosity  
+API - for tying to hardware devices  
+WebApp - storing data and analyzing data with dash
 
 ## requirements
 .config file located in the main directory.  This file must contain keys for
