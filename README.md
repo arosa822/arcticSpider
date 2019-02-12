@@ -13,7 +13,7 @@ between each request to simulate users and minimize impact on the target website
 
 ## Features 
 API - for tying to hardware devices  
-WebApp - storing data and analyzing data with dash
+WebApp - storing data and analyzing data with dash / plotly
 
 ## requirements
 .config file located in the main directory.  This file must contain keys for
