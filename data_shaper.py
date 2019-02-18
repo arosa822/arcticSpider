@@ -5,7 +5,7 @@ import sys
 import itertools
         
 def dePickle():
-    pickle_in = open('./vault/20190212data.pickle','rb')
+    pickle_in = open('./vault/20190217data.pickle','rb')
     pickledFile = pickle.load(pickle_in)
     #pickle_in.close()
     return pickledFile
@@ -33,9 +33,8 @@ def clean():
         date = data[field]['date']
         snow = data[field]['snow']
         lTemp = data[field]['l_temp']
-
         hTemp = data[field]['h_temp']
-        
+        past24 = data[field]['past24']       
         # first element is night for the current day
 
         snowDay = snow[0::2]
@@ -68,7 +67,8 @@ def clean():
         print('Day:\n{}'.format(snowDay))
         
         print('Night:\n{}'.format(snowNight))
-       
+      
+        print('data:\n{}'.format(past24))
         print('--------------------------------------------')
     return
 
