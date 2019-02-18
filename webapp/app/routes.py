@@ -1,6 +1,7 @@
 from app import app
 from flask import render_template
 import datetime
+from app.forms import LoginForm
 
 
 NOW = datetime.datetime.now()
@@ -29,3 +30,7 @@ def index():
 
     return  render_template('index.html', title = 'Arctic Spider', \
                  lastCrawl = lastCrawl, data=data)
+@app.route('/login')
+def login():
+    form = LoginForm()
+    return render_template('login.html',title='Sign In',form = form)
