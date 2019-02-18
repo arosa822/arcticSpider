@@ -99,14 +99,16 @@ def crawl():
             snow_tbl = soup.select('.us')
             high_tbl = soup.select('.high') 
             low_tbl = soup.select('.low')
-            
+            past24 = soup.select('.data-box')
+
             date_tbl = turnToList(data_tbl)[:5] # need only the first 5 entries 
             snow_tbl = turnToList(snow_tbl)
             high_tbl  = turnToList(high_tbl)
             low_tbl = turnToList(low_tbl)
+            past24_tbl = turnToList(past24)
 
             # store into dictionary
-            data[resort] = {'date':date_tbl,'snow':snow_tbl,'h_temp':high_tbl,'l_temp':low_tbl}
+            data[resort] = {'date':date_tbl,'snow':snow_tbl,'h_temp':high_tbl,'l_temp':low_tbl,'past24':past24_tbl}
 
             print(data[resort])                 
             print('\ncompleted crawling on {}.\n'.format(resort))
