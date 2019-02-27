@@ -30,6 +30,8 @@ def index():
 
     return  render_template('index.html', title = 'Arctic Spider', \
                  lastCrawl = lastCrawl, data=data)
+
+
 @app.route('/login', methods=['GET','POST'])
 def login():
     form = LoginForm()
