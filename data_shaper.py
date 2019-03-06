@@ -49,12 +49,21 @@ def clean():
         hTemp = combine(hTemp)
         
         # process strings and remove unwanded characters
-        snowDay = list(map(lambda x:x.strip('\"'), snowDay))
-        snowNight = list(map(lambda x:x.strip('\"'),snowNight))
+        snowDay = list(map(lambda x:x.strip('\"').split('-'), snowDay))
+        snowNight = list(map(lambda x:x.strip('\"').split('-'),snowNight))
+       
+        # remove '-' character, keep grouping and convert to int
+        snowDay = list(map(lambda x: [int(i) for i in x], snowDay))
+        snowNight = list(map(lambda x: [int(i) for i in x], snowNight))
+        
+        
         # replace degree F swymbol from temps using list comprehension
         lTemp = [s.replace(u'\N{DEGREE SIGN}F', '') for s in lTemp]
         hTemp = [s.replace(u'\N{DEGREE SIGN}F', '') for s in hTemp]
-
+        # convert strings to int
+        lTemp = list(map(lambda x:int(x),lTemp))
+        hTemp = list(map(lambda x: int(x),hTemp))
+        
         print('Resort: {}\n'.format(field))
 
         print('Dates:\n{}'.format(date))
@@ -76,4 +85,4 @@ def main():
     return clean()
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())
