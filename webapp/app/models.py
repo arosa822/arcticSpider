@@ -28,3 +28,21 @@ class Post(db.Model):
     def __repr__ (self):
         return '<Post {}>'.format(self.body)
 
+
+class Resort(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    location = db.Column(db.String(64), index=True, unique=True)
+    conditions = db.relationship('Conditions', backref='loc', lazy ='dynamic')
+
+    def __repr__(self):
+        return '<Resort {}>'.format(self.location)
+
+
+class Conditions(db.Model):
+    id = db.Column(db.Integer, primary_key=True) 
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    temp = db.Column(db.Integer)
+    resort_id = db.Column(db.Integer,db.ForeignKey('resort.id'))
+
+    def __repr__ (self):
+        return '<Condition {}>'.format(self.temp)
