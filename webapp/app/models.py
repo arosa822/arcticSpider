@@ -41,7 +41,10 @@ class Resort(db.Model):
 class Conditions(db.Model):
     id = db.Column(db.Integer, primary_key=True) 
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    temp = db.Column(db.Integer)
+    ltemp = db.Column(db.Integer)
+    htemp = db.Column(db.Integer)
+    snowDay = db.Column(db.Integer)
+    snowNight = db.Column(db.Integer)
     resort_id = db.Column(db.Integer,db.ForeignKey('resort.id'))
 
     def __repr__ (self):

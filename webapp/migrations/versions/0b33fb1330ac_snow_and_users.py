@@ -1,8 +1,8 @@
-"""user table and resort proto
+"""snow and users
 
-Revision ID: 9b544eadc1d0
+Revision ID: 0b33fb1330ac
 Revises: 
-Create Date: 2019-03-07 18:01:56.615758
+Create Date: 2019-03-08 22:18:17.495182
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '9b544eadc1d0'
+revision = '0b33fb1330ac'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -36,7 +36,10 @@ def upgrade():
     op.create_table('conditions',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('timestamp', sa.DateTime(), nullable=True),
-    sa.Column('temp', sa.Integer(), nullable=True),
+    sa.Column('ltemp', sa.Integer(), nullable=True),
+    sa.Column('htemp', sa.Integer(), nullable=True),
+    sa.Column('snowDay', sa.Integer(), nullable=True),
+    sa.Column('snowNight', sa.Integer(), nullable=True),
     sa.Column('resort_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['resort_id'], ['resort.id'], ),
     sa.PrimaryKeyConstraint('id')
