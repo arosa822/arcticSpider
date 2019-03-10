@@ -145,18 +145,19 @@ def main():
     # key error list containter 
     err = []
     for r in resortdb:
-        print('data processed for {}:'.format(r.location))
         
         try:
+
+            print('query: {}'.format(r.location))
             print(processed[r.location])
             print('\n')
         except KeyError:
+            print('\n    error...\n')
             err.append(r.location)
             pass
 
-    
-    print(index) 
-    print(err)
+    print('errors encountered:\n {}\n'.format(err)) 
+    print('query index:\n{}'.format(index))
 
     return 
 
