@@ -25,6 +25,7 @@ def combine(field):
     return combinedList
 
 def processData(fileLocation):
+    print('processing data for {}'.format(fileLocation))
     data = dePickle(fileLocation)
     error = data.pop('error',None)
     # get the current year to append to datetime objects
@@ -121,16 +122,43 @@ def searchDir(directory):
     result = DIR + '/' + results[0] 
     return result
 
+def dbResortList():
+    d = {}
+    resortdb = Resort.query.all()
+    print('resort index:')
+    for r in resortdb:
+        print(r.id,r.location)
+        d[r.location]=r.id
+    return d        
 
 
 def main():
+    # searh for latest data scrape
     latestData = searchDir(DIR)
+    # process the raw data
     processed =  processData(latestData)
-    print(processed)
-    for key in processed:
-        print(key)
+    # create an index for pushing processed data
+    index = dbResortList()
+    
+    # stash the data in the db
+    resortdb  = Resort.query.all()
+    # key error list containter 
+    err = []
+    for r in resortdb:
+        print('data processed for {}:'.format(r.location))
+        
+        try:
+            print(processed[r.location])
+            print('\n')
+        except KeyError:
+            err.append(r.location)
+            pass
 
-    return
+    
+    print(index) 
+    print(err)
+
+    return 
 
 if __name__=='__main__':
     sys.exit(main())
