@@ -4,15 +4,15 @@ import os
 import re
 import pickle
 from datetime import datetime, date
-
+import sys
 
 #folder/file locations
 DIR = '../vault'
 RESORT_LIST = '../vault/resortList.pickle'
 
 # extract the data from vault location
-def dePickle(location):
-    pickle_in = open(location,'rb')
+def dePickle(fileLocation):
+    pickle_in = open(fileLocation,'rb')
     pickledFile = pickle.load(pickle_in)
     return pickledFile
 
@@ -24,29 +24,58 @@ def combine(field):
                 combinedList.append(element)
     return combinedList
 
-def clearn():
-    data = dePickle()
+def processData(fileLocation):
+    data = dePickle(fileLocation)
     error = data.pop('error',None)
-
+    # get the current year to append to datetime objects
     year = date.today().strftime('%Y')
+    # initialize dictionary to hold all the data
+    # need to create seperate dictionary items for each 
+    # location as the program iterates over each location
+    processed = {}
 
     for key in data:
+        # initialize dictionaries for each location
+        processed[key]={}
+        # organize the data into seperate fields
         Date = combine(data[key]['date'])
         snowDay = combine(data[key]['snow'][0::2])
         snowNight = combine(data[key]['snow'][1::2])
         lTemp = combine(data[key]['l_temp'])
-        hTemp = combine(data[key]'h_temp'])
+        hTemp = combine(data[key]['h_temp'])
         info = combine(data[key]['past24'])
-
-        Date = [i + '/' + year for i in Date]
         
+        # process datetimes
+        Date = [i + '/' + year for i in Date]        
         # convert string dates to datetime objects
         n = 0
         for i in Date:
             Date[n] = datetime.strptime(i,'%m/%d/%Y')
             n+=1
+        # stash the datetime objects in dictionary
+        processed[key]['date']=Date
 
+        # process strings and remove unwanded characters for snow Data
+        snowDay = list(map(lambda x:x.strip('\"').split('-'), snowDay))
+        snowNight = list(map(lambda x:x.strip('\"').split('-'),snowNight))
+        # remove '-' character, keep grouping and convert to int
+        snowDay = list(map(lambda x: [int(i) for i in x], snowDay))
+        snowNight = list(map(lambda x: [int(i) for i in x], snowNight))
+        # stash the processed data in dictionary
+        processed[key]['snowDay']=snowDay
+        processed[key]['snowNight']=snowNight
 
+        # replace degree F swymbol from temps using list comprehension
+        lTemp = [s.replace(u'\N{DEGREE SIGN}F', '') for s in lTemp]
+        hTemp = [s.replace(u'\N{DEGREE SIGN}F', '') for s in hTemp]
+        # convert strings to int
+        lTemp = list(map(lambda x:int(x),lTemp))
+        hTemp = list(map(lambda x: int(x),hTemp))
+        # stash the processed data in the dictionary
+        processed[key]['ltemp']=lTemp
+        processed[key]['hTemp']=hTemp
+
+    return processed
 
 #helper function 
 def getResortList():
@@ -94,9 +123,14 @@ def searchDir(directory):
 
 
 
-
 def main():
+    latestData = searchDir(DIR)
+    processed =  processData(latestData)
+    print(processed)
+    for key in processed:
+        print(key)
+
     return
 
 if __name__=='__main__':
-    main()
+    sys.exit(main())
