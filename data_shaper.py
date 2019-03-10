@@ -3,7 +3,8 @@
 import pickle
 import sys
 import itertools
-        
+from datetime import datetime,date
+
 def dePickle():
     pickle_in = open('./vault/20190226data.pickle','rb')
     pickledFile = pickle.load(pickle_in)
@@ -30,7 +31,7 @@ def clean():
     # get the list of resorts
     for field in data:
         
-        date = data[field]['date']
+        Date = data[field]['date']
         snow = data[field]['snow']
         lTemp = data[field]['l_temp']
         hTemp = data[field]['h_temp']
@@ -44,10 +45,22 @@ def clean():
         # [[1,2],[3,4]] => [1,2,3,4]
         snowDay = combine(snowDay)
         snowNight = combine(snowNight) 
-        date = combine(date)
+        Date = combine(Date)
         lTemp = combine(lTemp)
         hTemp = combine(hTemp)
+       
+        # process datetime strings
+        now = date.today()
+        year = now.strftime('%Y')
+        # add current year to datetime
+        Date = [i + '/' + year for i in Date]
+
+        n = 0
+        for i in Date:
+                Date[n] = datetime.strptime(i,'%m/%d/%Y')
+                n +=1
         
+
         # process strings and remove unwanded characters
         snowDay = list(map(lambda x:x.strip('\"').split('-'), snowDay))
         snowNight = list(map(lambda x:x.strip('\"').split('-'),snowNight))
@@ -66,7 +79,9 @@ def clean():
         
         print('Resort: {}\n'.format(field))
 
-        print('Dates:\n{}'.format(date))
+        print('Dates:\n{}'.format(Date))
+        
+        print(type(Date[1]))
 
         print('Low Temp:\n{}'.format(lTemp))
 
