@@ -1,3 +1,17 @@
+#! /usr/bin/env python3
+'''
+Description of methods here:
+    * process for adding resort list (import from interpreter) 
+        - only needs to be done once, this will link to resort data obtained
+
+Todo:
+    add logs for collecting errors. sertain resorts in the list do 
+    not match 'resort name' of data obtained.  
+
+    - generate process for appending resort table with data obtained ('key'
+      values?? 
+
+'''
 from app import db
 from app.models import User,Resort,Conditions
 import os
@@ -131,7 +145,14 @@ def dbResortList():
         d[r.location]=r.id
     return d        
 
-
+def iterateData(dic,key):
+    '''iterates through one of the dictionary elements given
+    a specific key
+    :param:
+    '''
+    
+    
+    return 
 def main():
     # searh for latest data scrape
     latestData = searchDir(DIR)
@@ -145,19 +166,38 @@ def main():
     # key error list containter 
     err = []
     for r in resortdb:
-        
+       
+        '''insert explanation here '''
         try:
 
             print('query: {}'.format(r.location))
+            print(r)
             print(processed[r.location])
             print('\n')
+            
+            #iterate over the days
+            days = processed[r.location]['date']
+            #snowDay = processed[r.location]['snowDay']
+            #snowNight = processed[r.location]['snowNight']
+            lTemp = processed[r.location]['lTemp']
+            #hTemp = processed[r.location]['hTemp']
+            
+
+            print(len(days))
+            
+            for d in range(0,len(days)):
+                print(snowDay[d][:-1])
+                d = Conditions(snowDay = snowDay[d],loc = r)
+                print(d)
         except KeyError:
             print('\n    error...\n')
             err.append(r.location)
             pass
-
-    print('errors encountered:\n {}\n'.format(err)) 
-    print('query index:\n{}'.format(index))
+        except:
+            print('some other error occured')
+    
+    #print('errors encountered:\n {}\n'.format(err)) 
+    #print('query index:\n{}'.format(index))
 
     return 
 
