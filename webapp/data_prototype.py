@@ -87,7 +87,7 @@ def processData(fileLocation):
         lTemp = list(map(lambda x:int(x),lTemp))
         hTemp = list(map(lambda x: int(x),hTemp))
         # stash the processed data in the dictionary
-        processed[key]['ltemp']=lTemp
+        processed[key]['lTemp']=lTemp
         processed[key]['hTemp']=hTemp
 
     return processed
@@ -172,33 +172,55 @@ def main():
 
             print('query: {}'.format(r.location))
             print(r)
-            print(processed[r.location])
+            #print(processed[r.location])
             print('\n')
             
             #iterate over the days
             days = processed[r.location]['date']
-            #snowDay = processed[r.location]['snowDay']
-            #snowNight = processed[r.location]['snowNight']
+            snowDay = processed[r.location]['snowDay']
+            snowNight = processed[r.location]['snowNight']
             lTemp = processed[r.location]['lTemp']
-            #hTemp = processed[r.location]['hTemp']
+            hTemp = processed[r.location]['hTemp']
             
 
-            print(len(days))
-            
             for d in range(0,len(days)):
-                print(snowDay[d][:-1])
-                d = Conditions(snowDay = snowDay[d],loc = r)
-                print(d)
+                #print(snowDay[d][-1])
+                #print(snowNight[d][-1])
+                #print(lTemp[d])
+                #print(hTemp[d])
+                #print(days[d])
+                data  = Conditions(snowDay = snowDay[d][-1],
+                                snowNight = snowNight[d][-1],
+                                ltemp = lTemp[d],
+                                htemp = lTemp[d],
+                                timestamp = days[d],
+                                loc = r)
+                db.session.add(data)
+
+            
+                #print("success")
         except KeyError:
-            print('\n    error...\n')
-            err.append(r.location)
+            'query by name in list, some names do not exist in database'
+            print('\n   key error...\n')
+            #err.append(r.location)
             pass
         except:
             print('some other error occured')
     
     #print('errors encountered:\n {}\n'.format(err)) 
     #print('query index:\n{}'.format(index))
+    
 
+    conditions = Conditions.query.all()
+    for c in conditions:
+        print(c.loc.location,c.timestamp,c.snowDay,c.snowNight)
+    
+    u = input("commit data to database? (y/n) \n")
+    if u == 'y':
+        print('commiting data to database...\n')
+        db.session.commit()
+    else:
+        pass
     return 
 
 if __name__=='__main__':

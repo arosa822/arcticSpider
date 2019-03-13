@@ -48,4 +48,4 @@ class Conditions(db.Model):
     resort_id = db.Column(db.Integer,db.ForeignKey('resort.id'))
 
     def __repr__ (self):
-        return '<Condition {}>'.format(self.temp)
+        return '<Condition {}>'.format(self.ltemp)
