@@ -38,9 +38,10 @@ class Resort(db.Model):
         return '<Resort {}>'.format(self.location)
 
 
+
 class Conditions(db.Model):
     id = db.Column(db.Integer, primary_key=True) 
-    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    forcastDate = db.Column(db.DateTime, index=True)
     ltemp = db.Column(db.Integer)
     htemp = db.Column(db.Integer)
     snowDay = db.Column(db.Integer)
@@ -48,4 +49,11 @@ class Conditions(db.Model):
     resort_id = db.Column(db.Integer,db.ForeignKey('resort.id'))
 
     def __repr__ (self):
-        return '<Condition {}>'.format(self.ltemp)
+        return '<Condition {}>'.format(self.resort_id)
+
+class SnowUpdates(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    timeStamp = db.Column(db.DateTime, index = True, default = datetime.utcnow)
+
+    def __repr__(self):
+        return '<Last Update: {}'.format(self.timeStamp)
