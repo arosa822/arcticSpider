@@ -113,7 +113,7 @@ def crawl():
             print(data[resort])                 
             print('\ncompleted crawling on {}.\n'.format(resort))
 
-        time.sleep(randint(15,40))
+        time.sleep(randint(5,20))
     
     # stash data and errors 
     data['error'] = errorlog
